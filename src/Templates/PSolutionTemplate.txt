@@ -1,0 +1,10 @@
+﻿import clr
+
+clr.AddReference("AdventOfCode.Utils")
+from AdventOfCode.Utils import SolutionRunner as sr
+
+# Solution for 20YY day DD
+def solve(input):
+  #Solve the problem here
+  sr.SubmitPartOne("")
+  sr.SubmitPartTwo("")
