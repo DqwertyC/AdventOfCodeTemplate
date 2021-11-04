@@ -1,8 +1,8 @@
-# Advent Of Code - Template
+# Advent Of Code
 This repository provides resources for creating Advent of Code puzzle solutions. It requires .NET 5.0 on Windows 10 to access all functionality. 
-Currently supports solutions written in C#, JavaScript (via [Jint](https://github.com/sebastienros/jint)), and Python (via [IronPython](https://ironpython.net/)).
+Currently supports solutions written in C#, JavaScript (via [Jint](https://github.com/sebastienros/jint)), and Python (via [Python.NET](https://github.com/pythonnet/pythonnet)).
 
-To get started, open the repository in VS Code, then run `dotnet build` to install dependencies.
+To get started, open the repository in VS Code, then run `dotnet build` to install dependencies. You'll also need to install the [Command Variables](https://marketplace.visualstudio.com/items?itemName=rioj7.command-variable) VS Code extension to be able to debug your code.
 
 ## Setting up files
 To create the folder structure for a new year, run `dotnet run --y YYYY --l LANG --init`, where YYYY is the year you'd like to initialize and LANG is one of `cs`, `js`, or `py` (for C#, JavaScript, or Python, respectively). This will create a new folder under `src/Puzzles` for the given year, with subfolders for the puzzle inputs and solutions in the chosen language.
@@ -19,3 +19,6 @@ Solutions are reported with the functions `SubmitPartOne` and `SubmitPartTwo`. U
 Tests can be run with `dotnet run --y YYYY --d DD --l LANG`. Omitting the day argument will attempt to run all tests for the given year. The results will be displayed for each part, along with the milliseconds after starting the test that each part of the solution was reported.
 
 If an argument is missing, the program will check the `config.json` file to see if a default has been set. This can be useful if you want to use the vscode debugger.
+
+## Python users
+To be able to run Python solutions, you'll need to update the path to your python library in `config.json`. On Windows, this is typically found under `C:\\PythonXX\\pythonXX.dll`.

@@ -5,7 +5,7 @@ namespace AdventOfCode.Solutions
   public abstract class CSharpSolution
   {
     public abstract void Solve(PuzzleInput input);
-    protected static SolutionRunner.DelReport SubmitPartOne = SolutionRunner.delPartOne;
-    protected static SolutionRunner.DelReport SubmitPartTwo = SolutionRunner.delPartTwo;
+    protected static SolutionRunner.cDelSubmit SubmitPartOne = SolutionRunner.cDelOne;
+    protected static SolutionRunner.cDelSubmit SubmitPartTwo = SolutionRunner.cDelTwo;
   }
 }

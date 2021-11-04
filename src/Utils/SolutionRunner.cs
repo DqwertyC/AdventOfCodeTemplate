@@ -2,8 +2,10 @@
 using System;
 using System.IO;
 using System.Diagnostics;
-using Microsoft.Scripting.Hosting;
+using System.Collections.Generic;
 using AdventOfCode.Solutions;
+using Python.Runtime;
+using Python;
 
 namespace AdventOfCode.Utils
 {
@@ -16,9 +18,12 @@ namespace AdventOfCode.Utils
     private static long _part2Time;
     private static bool _part1Solved;
     private static bool _part2Solved;
-    public delegate void DelReport(object solution);
-    public static DelReport delPartOne = SubmitPartOne;
-    public static DelReport delPartTwo = SubmitPartTwo;
+    public delegate void cDelSubmit(object solution);
+    public static cDelSubmit cDelOne = CSubmitPartOne;
+    public static cDelSubmit cDelTwo = CSubmitPartTwo;
+    public delegate void pDelSubmit(PyObject solution);
+    public static pDelSubmit pDelOne = PSubmitPartOne;
+    public static pDelSubmit pDelTwo = PSubmitPartTwo;
 
     public static void RunSolver(int year, int day, Program.Language lang)
     {
@@ -64,8 +69,8 @@ namespace AdventOfCode.Utils
       Engine engine = new Engine();
 
       engine.SetValue("input", input.GetRaw());
-      engine.SetValue("SubmitPartOne", delPartOne);
-      engine.SetValue("SubmitPartTwo", delPartTwo);
+      engine.SetValue("SubmitPartOne", cDelOne);
+      engine.SetValue("SubmitPartTwo", cDelTwo);
       engine.Execute(scriptText);
 
       _timer.Start();
@@ -75,17 +80,24 @@ namespace AdventOfCode.Utils
 
     public static void SolvePython(PuzzleInput input, int year, int day)
     {
-      string scriptText = File.ReadAllText(Path.Combine(IOUtils.PSolutionPath(year, day)));
-      ScriptEngine engine = IronPython.Hosting.Python.CreateEngine();
-      ScriptScope scope = engine.CreateScope();
-      engine.Execute(scriptText, scope);
-      scope.SetVariable("submit_part_one", delPartOne);
-      scope.SetVariable("submit_part_two", delPartTwo);
-      dynamic solve = scope.GetVariable("solve");
+      string solutionPath = IOUtils.PSolutionPath(year, day);
 
-      _timer.Start();
-      solve(input.GetRaw());
-      _timer.Stop();
+      Runtime.PythonDLL = (string)IOUtils.ConfigObject()["pydll"];
+
+      using (Py.GIL())
+      {
+        PythonEngine.Initialize();
+        using (PyModule scope = Py.CreateScope())
+        {
+          dynamic importlib = Py.Import("importlib.util");
+          dynamic pySpec = importlib.spec_from_file_location("solution", solutionPath);
+          dynamic pyModule = importlib.module_from_spec(pySpec);
+          pySpec.loader.exec_module(pyModule);
+
+          pyModule.init(pDelOne, pDelTwo);
+          pyModule.solve(input.GetRaw());
+        }
+      }
     }
 
     public static (string solution, double time) GetPartOne()
@@ -112,18 +124,40 @@ namespace AdventOfCode.Utils
       }
     }
 
-    private static void SubmitPartOne(object answer)
+    private static void CSubmitPartOne(object answer)
     {
       _part1Time = _timer.ElapsedMilliseconds;
       _part1Answer = answer.ToString();
       _part1Solved = true;
     }
 
-    private static void SubmitPartTwo(object answer)
+    private static void CSubmitPartTwo(object answer)
     {
       _part2Time = _timer.ElapsedMilliseconds;
       _part2Answer = answer.ToString();
       _part2Solved = true;
+    }
+
+    private static void PSubmitPartOne(PyObject answer)
+    {
+      _part1Time = _timer.ElapsedMilliseconds;
+      _part1Solved = true;
+
+      using (Py.GIL())
+      {
+        _part1Answer = answer.ToString();
+      }
+    }
+
+    private static void PSubmitPartTwo(PyObject answer)
+    {
+      _part2Time = _timer.ElapsedMilliseconds;
+      _part2Solved = true;
+
+      using (Py.GIL())
+      {
+        _part2Answer = answer.ToString();
+      }
     }
   }
 }

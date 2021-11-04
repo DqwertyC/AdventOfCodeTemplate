@@ -2,6 +2,7 @@
 using AdventOfCode.Solutions;
 using System;
 using System.IO;
+using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 
 namespace AdventOfCode
@@ -144,6 +145,13 @@ namespace AdventOfCode
         {
           Console.Error.WriteLine("Please specify a language!");
         }
+      }
+
+      if (Language.py == lang)
+      {
+        var pid = Process.GetCurrentProcess().Id;
+        File.WriteAllText(IOUtils.PIDPath(), $"{pid}");
+        Console.WriteLine("ready for python debugger");
       }
 
       if (initSet)

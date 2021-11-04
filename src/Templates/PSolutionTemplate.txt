@@ -1,5 +1,19 @@
+﻿def init(del_one, del_two):
+  global submit_part_one
+  global submit_part_two
+  submit_part_one = del_one
+  submit_part_two = del_two
+
+def enable_debug():
+  import sys
+  import time
+  while not sys.gettrace():
+    time.sleep(0.1)
+
 # Solution for 20YY day DD
 def solve(input):
+  #Uncomment this to enable debugging
+  #enable_debug()
   #Solve the problem here
-  submit_part_one("")
-  submit_part_two("")
+  sr.SubmitPartOne("")
+  sr.SubmitPartTwo("")

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
@@ -42,6 +43,14 @@ namespace AdventOfCode.Utils
       }
 
       return _config;
+    }
+
+    public static string PIDPath()
+    {
+      if (!_rootDirFound)
+        FindRootDir();
+
+      return Path.Combine(_rootDir, $"../tmp/PID.txt");
     }
 
     public static Program.Language GetLanguage(string lang)
