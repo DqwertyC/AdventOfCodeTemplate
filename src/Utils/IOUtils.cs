@@ -27,7 +27,7 @@ namespace AdventOfCode.Utils
 
     public static void PrintSolution(this TextWriter console, (string solution, double millis) partOne, (string solution, double millis) partTwo)
     {
-      console.WriteLine($"Part One: ({partOne.millis}ms)\n{partOne.solution}\n\nPart Two: ({partTwo.millis}ms)\n{partTwo.solution}");
+      console.WriteLine($"Part One: ({partOne.millis} ticks)\n{partOne.solution}\n\nPart Two: ({partTwo.millis} ticks)\n{partTwo.solution}");
     }
 
     public static JObject ConfigObject()

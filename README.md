@@ -1,6 +1,6 @@
 # Advent Of Code
 This repository provides resources for creating Advent of Code puzzle solutions. It requires .NET 5.0 on Windows 10 to access all functionality. 
-Currently supports solutions written in C#, JavaScript (via [Jint](https://github.com/sebastienros/jint)), and Python (via [Python.NET](https://github.com/pythonnet/pythonnet)).
+Currently supports solutions written in C#, JavaScript (via [ClearScript](https://github.com/microsoft/ClearScript)), and Python (via [Python.NET](https://github.com/pythonnet/pythonnet)).
 
 To get started, open the repository in VS Code, then run `dotnet build` to install dependencies. You'll also need to install the [Command Variables](https://marketplace.visualstudio.com/items?itemName=rioj7.command-variable) VS Code extension to be able to debug your code.
 

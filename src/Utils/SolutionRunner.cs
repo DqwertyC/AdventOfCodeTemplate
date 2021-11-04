@@ -1,11 +1,9 @@
-﻿using Jint;
-using System;
-using System.IO;
-using System.Diagnostics;
-using System.Collections.Generic;
+﻿using Microsoft.ClearScript.V8;
+using Microsoft.ClearScript;
 using AdventOfCode.Solutions;
+using System.Diagnostics;
 using Python.Runtime;
-using Python;
+using System;
 
 namespace AdventOfCode.Utils
 {
@@ -65,23 +63,21 @@ namespace AdventOfCode.Utils
 
     public static void SolveJavaScript(PuzzleInput input, int year, int day)
     {
-      string scriptText = File.ReadAllText(Path.Combine(IOUtils.JSolutionPath(year, day)));
-      Engine engine = new Engine();
+      V8ScriptEngine engine = new V8ScriptEngine(V8ScriptEngineFlags.EnableDebugging | V8ScriptEngineFlags.AwaitDebuggerAndPauseOnStart, 9222);
+      engine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
 
-      engine.SetValue("input", input.GetRaw());
-      engine.SetValue("SubmitPartOne", cDelOne);
-      engine.SetValue("SubmitPartTwo", cDelTwo);
-      engine.Execute(scriptText);
+      engine.ExecuteDocument(IOUtils.JSolutionPath(year, day));
+      engine.AddHostObject("SubmitPartOne", cDelOne);
+      engine.AddHostObject("SubmitPartTwo", cDelTwo);
 
       _timer.Start();
-      engine.Invoke("solve");
+      engine.Invoke("solve", input.GetRaw());
       _timer.Stop();
     }
 
     public static void SolvePython(PuzzleInput input, int year, int day)
     {
       string solutionPath = IOUtils.PSolutionPath(year, day);
-
       Runtime.PythonDLL = (string)IOUtils.ConfigObject()["pydll"];
 
       using (Py.GIL())
@@ -95,7 +91,10 @@ namespace AdventOfCode.Utils
           pySpec.loader.exec_module(pyModule);
 
           pyModule.init(pDelOne, pDelTwo);
+
+          _timer.Start();
           pyModule.solve(input.GetRaw());
+          _timer.Stop();
         }
       }
     }
@@ -126,21 +125,21 @@ namespace AdventOfCode.Utils
 
     private static void CSubmitPartOne(object answer)
     {
-      _part1Time = _timer.ElapsedMilliseconds;
+      _part1Time = _timer.ElapsedTicks;
       _part1Answer = answer.ToString();
       _part1Solved = true;
     }
 
     private static void CSubmitPartTwo(object answer)
     {
-      _part2Time = _timer.ElapsedMilliseconds;
+      _part2Time = _timer.ElapsedTicks;
       _part2Answer = answer.ToString();
       _part2Solved = true;
     }
 
     private static void PSubmitPartOne(PyObject answer)
     {
-      _part1Time = _timer.ElapsedMilliseconds;
+      _part1Time = _timer.ElapsedTicks;
       _part1Solved = true;
 
       using (Py.GIL())
@@ -151,7 +150,7 @@ namespace AdventOfCode.Utils
 
     private static void PSubmitPartTwo(PyObject answer)
     {
-      _part2Time = _timer.ElapsedMilliseconds;
+      _part2Time = _timer.ElapsedTicks;
       _part2Solved = true;
 
       using (Py.GIL())

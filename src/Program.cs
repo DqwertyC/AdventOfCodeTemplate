@@ -147,11 +147,16 @@ namespace AdventOfCode
         }
       }
 
+      var pid = Process.GetCurrentProcess().Id;
+      File.WriteAllText(IOUtils.PIDPath(), $"{pid}");
+
       if (Language.py == lang)
       {
-        var pid = Process.GetCurrentProcess().Id;
-        File.WriteAllText(IOUtils.PIDPath(), $"{pid}");
         Console.WriteLine("ready for python debugger");
+      }
+      else if (Language.js == lang)
+      {
+        Console.WriteLine("ready for javascript debugger");
       }
 
       if (initSet)
