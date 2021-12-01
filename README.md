@@ -11,7 +11,7 @@ To create the folder structure for a new year, run `dotnet run --y YYYY --init`,
 Inputs are stored in the `Inputs` subdirectory for each year. When a test is run, the application will check the directory so see if the given input exists. If not, it will be downloaded automatically, so long as the user has put their session cookie information under `"cookie":` in the `config.json` file. Downloading inputs for dates in the future will not be attempted.
 
 ## Writing tests
-Each test template contains a method or function named `solve`. This is the entry point for your solution. Python and JavaScript solutions will have a string variable named `input` containing the input. C# solutions have a `PuzzleInput` object that contains extra methods for parsing the input into different common puzzle structures.
+Each test template contains a method or function named `solve`. This is the entry point for your solution. C# solutions have a `PuzzleInput` object that contains extra methods for parsing the input into different common puzzle structures.
 
 Solutions are reported with the functions `SubmitPartOne` and `SubmitPartTwo`. Using these functions will store your answer and record the time the answer was found. 
 
