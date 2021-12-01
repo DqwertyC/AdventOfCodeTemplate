@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Diagnostics;
-using Newtonsoft.Json.Linq;
+﻿using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AdventOfCode.Utils
 {
@@ -20,7 +18,6 @@ namespace AdventOfCode.Utils
                         "\t--h, --help:\n\t\tDisplay this usage message\n" +
                         "\t--y, --year [year]:\n\t\tSet the year to test or create a folder for. Must be at least 2015.\n" +
                         "\t--d, --day [day]:\n\t\tSet the day to test. Must be between 1 and 25 (inclusive).\n" +
-                        "\t--l, --lang [language]:\n\t\tSet the language to run. Must be one of [\"cs\", \"js\", \"py\"].\n" +
                         "\t--init:\n\t\tCreate a new folder structure for the given year\n"
                         );
     }
@@ -45,77 +42,21 @@ namespace AdventOfCode.Utils
       return _config;
     }
 
-    public static string PIDPath()
-    {
-      if (!_rootDirFound)
-        FindRootDir();
-
-      return Path.Combine(_rootDir, $"../tmp/PID.txt");
-    }
-
-    public static Program.Language GetLanguage(string lang)
-    {
-      if (lang.Equals("cs"))
-      {
-        return Program.Language.cs;
-      }
-      else if (lang.Equals("js"))
-      {
-        return Program.Language.js;
-      }
-      else if (lang.Equals("py"))
-      {
-        return Program.Language.py;
-      }
-      else
-      {
-        Console.Error.WriteLine("Language must be one of [\"cs\", \"js\", \"py\"]!");
-        throw new Exception();
-      }
-    }
-
-    public static string TemplatePath(this Program.Language lang)
+    public static string TemplatePath()
     {
       if (!_rootDirFound) FindRootDir();
 
-      switch (lang)
-      {
-        case Program.Language.cs:
-          return Path.Combine(_rootDir, $"Templates/CSolutionTemplate.txt");
-        case Program.Language.js:
-          return Path.Combine(_rootDir, $"Templates/JSolutionTemplate.txt");
-        case Program.Language.py:
-          return Path.Combine(_rootDir, $"Templates/PSolutionTemplate.txt");
-      }
-      return string.Empty;
+      return Path.Combine(_rootDir, $"Templates/CSolutionTemplate.txt");
     }
 
-    public static string SolutionPath(this Program.Language lang, int year, int day)
+    public static string SolutionPath(int year, int day)
     {
-      switch (lang)
-      {
-        case Program.Language.cs:
-          return CSolutionPath(year, day);
-        case Program.Language.js:
-          return JSolutionPath(year, day);
-        case Program.Language.py:
-          return PSolutionPath(year, day);
-      }
-      return string.Empty;
+      return CSolutionPath(year, day);
     }
 
-    public static string SolutionPath(this Program.Language lang, int year)
+    public static string SolutionPath(int year)
     {
-      switch (lang)
-      {
-        case Program.Language.cs:
-          return CSolutionPath(year);
-        case Program.Language.js:
-          return JSolutionPath(year);
-        case Program.Language.py:
-          return PSolutionPath(year);
-      }
-      return string.Empty;
+      return CSolutionPath(year);
     }
 
     public static string InputPath(int year, int day)

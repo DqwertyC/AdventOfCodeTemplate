@@ -22,6 +22,11 @@ namespace AdventOfCode.Utils
       return rawInput;
     }
 
+    public override string ToString()
+    {
+      return rawInput;
+    }
+
     public List<char> GetChars()
     {
       return new List<char>(rawInput.ToCharArray());
