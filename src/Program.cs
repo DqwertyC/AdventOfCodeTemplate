@@ -9,16 +9,8 @@ namespace AdventOfCode
 {
   public class Program
   {
-    public enum Language
-    {
-      cs,
-      js,
-      py
-    }
-
     static void Main(string[] args)
     {
-      Language lang = Language.cs;
       int year = 0;
       int day = 0;
 
@@ -26,7 +18,6 @@ namespace AdventOfCode
       bool daySet = false;
       bool helpSet = false;
       bool initSet = false;
-      bool langSet = false;
 
       try
       {
@@ -78,19 +69,6 @@ namespace AdventOfCode
               throw new Exception();
             }
           }
-          else if (args[i].Equals("--lang") || args[i].Equals("--l"))
-          {
-            if (langSet)
-            {
-              Console.Error.WriteLine("Language specified multiple times!");
-              throw new Exception();
-            }
-
-            langSet = true;
-            i++;
-
-            lang = IOUtils.GetLanguage(args[i]);
-          }
           else if (args[i].Equals("--help") || args[i].Equals("--h"))
           {
             helpSet = true;
@@ -134,36 +112,11 @@ namespace AdventOfCode
         daySet = true;
       }
 
-      if (!langSet)
-      {
-        if (config.ContainsKey("lang"))
-        {
-          lang = IOUtils.GetLanguage((string)config["lang"]);
-          langSet = true;
-        }
-        else
-        {
-          Console.Error.WriteLine("Please specify a language!");
-        }
-      }
-
-      var pid = Process.GetCurrentProcess().Id;
-      File.WriteAllText(IOUtils.PIDPath(), $"{pid}");
-
-      if (Language.py == lang)
-      {
-        Console.WriteLine("ready for python debugger");
-      }
-      else if (Language.js == lang)
-      {
-        Console.WriteLine("ready for javascript debugger");
-      }
-
       if (initSet)
       {
-        if (!Directory.Exists(lang.SolutionPath(year)))
+        if (!Directory.Exists(IOUtils.SolutionPath(year)))
         {
-          Directory.CreateDirectory(lang.SolutionPath(year));
+          Directory.CreateDirectory(IOUtils.SolutionPath(year));
         }
 
         if (!Directory.Exists(IOUtils.InputPath(year)))
@@ -171,11 +124,11 @@ namespace AdventOfCode
           Directory.CreateDirectory(IOUtils.InputPath(year));
         }
 
-        string template = File.ReadAllText(lang.TemplatePath());
+        string template = File.ReadAllText(IOUtils.TemplatePath());
 
         for (int i = 1; i <= 25; i++)
         {
-          string solutionPath = lang.SolutionPath(year, i);
+          string solutionPath = IOUtils.SolutionPath(year, i);
 
           if (!File.Exists(solutionPath))
           {
@@ -194,10 +147,10 @@ namespace AdventOfCode
         {
           if (day == 0 || day == i)
           {
-            if (File.Exists(lang.SolutionPath(year, i)))
+            if (File.Exists(IOUtils.SolutionPath(year, i)))
             {
               Console.Out.WriteLine($"{year} day {i:D2}");
-              SolutionRunner.RunSolver(year, i, lang);
+              SolutionRunner.RunSolver(year, i);
               Console.Out.PrintSolution(SolutionRunner.GetPartOne(), SolutionRunner.GetPartTwo());
               Console.Out.WriteLine("----------------------------------------");
             }

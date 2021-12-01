@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "1.0.0",
   "configurations": [
     {
       "name": "C# Debugger",
@@ -15,89 +15,6 @@
         "hidden": false,
         "group": "Debuggers",
         "order": 1
-      }
-    },
-    {
-      "name": "Python Debugger",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/bin/Debug/net5.0/AdventOfCode.dll",
-      "args": ["--l", "py"],
-      "cwd": "${workspaceFolder}",
-      "console": "internalConsole",
-      "stopAtEntry": false,
-      "presentation": {
-        "hidden": false,
-        "group": "Debuggers",
-        "order": 1
-      },
-      "serverReadyAction": {
-        "action": "startDebugging",
-        "pattern": "ready for python debugger",
-        "name": "Python"
-      }
-    },
-    {
-      "name": "Python.NET",
-      "type": "python",
-      "request": "attach",
-      "processId": "${input:readPID}",
-      "presentation": {
-        "hidden": true,
-        "group": "",
-        "order": 1
-      }
-    },
-    {
-      "name": "JavaScript Core",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/bin/Debug/net5.0/AdventOfCode.dll",
-      "args": ["--l", "js"],
-      "cwd": "${workspaceFolder}",
-      "console": "internalConsole",
-      "stopAtEntry": false,
-      "presentation": {
-        "hidden": true,
-        "group": "",
-        "order": 1
-      }
-    },
-    {
-      "name": "ClearScript",
-      "type": "node",
-      "request": "attach",
-      "protocol": "inspector",
-      "address": "localhost",
-      "port": 9222,
-      "presentation": {
-        "hidden": true,
-        "group": "",
-        "order": 1
-      }
-    }
-  ],
-  "compounds": [
-    {
-      "name": "JavaScript Debugger",
-      "configurations": ["JavaScript Core", "ClearScript"],
-      "stopAll": true,
-      "presentation": {
-        "hidden": false,
-        "group": "Debuggers",
-        "order": 1
-      }
-    }
-  ],
-  "inputs": [
-    {
-      "id": "readPID",
-      "type": "command",
-      "command": "extension.commandvariable.file.content",
-      "args": {
-        "fileName": "${workspaceFolder}/tmp/PID.txt"
       }
     }
   ]

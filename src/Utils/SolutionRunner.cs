@@ -1,8 +1,5 @@
-﻿using Microsoft.ClearScript.V8;
-using Microsoft.ClearScript;
-using AdventOfCode.Solutions;
+﻿using AdventOfCode.Solutions;
 using System.Diagnostics;
-using Python.Runtime;
 using System;
 
 namespace AdventOfCode.Utils
@@ -19,11 +16,8 @@ namespace AdventOfCode.Utils
     public delegate void cDelSubmit(object solution);
     public static cDelSubmit cDelOne = CSubmitPartOne;
     public static cDelSubmit cDelTwo = CSubmitPartTwo;
-    public delegate void pDelSubmit(PyObject solution);
-    public static pDelSubmit pDelOne = PSubmitPartOne;
-    public static pDelSubmit pDelTwo = PSubmitPartTwo;
 
-    public static void RunSolver(int year, int day, Program.Language lang)
+    public static void RunSolver(int year, int day)
     {
       _timer = new Stopwatch();
       _part1Answer = string.Empty;
@@ -34,19 +28,7 @@ namespace AdventOfCode.Utils
       _part2Time = 0;
 
       PuzzleInput input = new PuzzleInput(year, day);
-
-      switch (lang)
-      {
-        case Program.Language.cs:
-          SolveCSharp(input, year, day);
-          break;
-        case Program.Language.js:
-          SolveJavaScript(input, year, day);
-          break;
-        case Program.Language.py:
-          SolvePython(input, year, day);
-          break;
-      }
+      SolveCSharp(input, year, day);
     }
 
     public static void SolveCSharp(PuzzleInput input, int year, int day)
@@ -59,44 +41,6 @@ namespace AdventOfCode.Utils
       _timer.Start();
       solution.Solve(input);
       _timer.Stop();
-    }
-
-    public static void SolveJavaScript(PuzzleInput input, int year, int day)
-    {
-      V8ScriptEngine engine = new V8ScriptEngine(V8ScriptEngineFlags.EnableDebugging | V8ScriptEngineFlags.AwaitDebuggerAndPauseOnStart, 9222);
-      engine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
-
-      engine.ExecuteDocument(IOUtils.JSolutionPath(year, day));
-      engine.AddHostObject("SubmitPartOne", cDelOne);
-      engine.AddHostObject("SubmitPartTwo", cDelTwo);
-
-      _timer.Start();
-      engine.Invoke("solve", input.GetRaw());
-      _timer.Stop();
-    }
-
-    public static void SolvePython(PuzzleInput input, int year, int day)
-    {
-      string solutionPath = IOUtils.PSolutionPath(year, day);
-      Runtime.PythonDLL = (string)IOUtils.ConfigObject()["pydll"];
-
-      using (Py.GIL())
-      {
-        PythonEngine.Initialize();
-        using (PyModule scope = Py.CreateScope())
-        {
-          dynamic importlib = Py.Import("importlib.util");
-          dynamic pySpec = importlib.spec_from_file_location("solution", solutionPath);
-          dynamic pyModule = importlib.module_from_spec(pySpec);
-          pySpec.loader.exec_module(pyModule);
-
-          pyModule.init(pDelOne, pDelTwo);
-
-          _timer.Start();
-          pyModule.solve(input.GetRaw());
-          _timer.Stop();
-        }
-      }
     }
 
     public static (string solution, double time) GetPartOne()
@@ -135,28 +79,6 @@ namespace AdventOfCode.Utils
       _part2Time = _timer.ElapsedTicks;
       _part2Answer = answer.ToString();
       _part2Solved = true;
-    }
-
-    private static void PSubmitPartOne(PyObject answer)
-    {
-      _part1Time = _timer.ElapsedTicks;
-      _part1Solved = true;
-
-      using (Py.GIL())
-      {
-        _part1Answer = answer.ToString();
-      }
-    }
-
-    private static void PSubmitPartTwo(PyObject answer)
-    {
-      _part2Time = _timer.ElapsedTicks;
-      _part2Solved = true;
-
-      using (Py.GIL())
-      {
-        _part2Answer = answer.ToString();
-      }
     }
   }
 }

@@ -1,7 +1,0 @@
-﻿// Solution for 20YY day DD 
-function solve() {
-    // `input` is a string containing the puzzle input
-
-    SubmitPartOne("")
-    SubmitPartTwo("")
-}
