@@ -2,14 +2,14 @@
 
 namespace AdventOfCode.Solutions
 {
-    public class Solution_20YY_DD : CSharpSolution
+  public class Solution_20YY_DD : CSharpSolution
+  {
+    public override void Solve(PuzzleInput input)
     {
-        public override void Solve(PuzzleInput input)
-        {
-            // Write your puzzle solution here!
+      // Write your puzzle solution here!
 
-            SubmitPartOne(string.Empty);
-            SubmitPartTwo(string.Empty);
-        }
+      SubmitPartOne(string.Empty);
+      SubmitPartTwo(string.Empty);
     }
+  }
 }
